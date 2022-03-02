@@ -10,10 +10,9 @@ public class CarAgent : Agent
     public float speed = 10.0f;
     public float torque = 10.0f;
 
-    public int progressScore = 0;
+    private Transform trackPosition;
 
-    private Transform trackTransform;
-
+    // Heuristic for human input
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
@@ -22,68 +21,84 @@ public class CarAgent : Agent
         continuousActionsOut[1] = Input.GetAxis("Vertical");
     }
 
+    // Actually move the car
     private void PerformMove(float h, float v, float d)
     {
         float distance = speed * v;
-        float rotation = h * torque * 90f;
-
         transform.Translate(distance * d * Vector3.forward);
+
+        float rotation = h * torque * 90f;
         transform.Rotate(0f, rotation * d, 0f);
     }
 
+    // MLAgents action comes through
     public override void OnActionReceived(ActionBuffers actions)
     {
         var continuousActions = actions.ContinuousActions;
         float horizontal = continuousActions[0];
         float vertical = continuousActions[1];
+        float timeStep = Time.fixedDeltaTime;
 
+        // Store the current position before we make a move.
+        var carPosition = transform.position;
+
+        // Do a move
         PerformMove(horizontal, vertical, Time.fixedDeltaTime);
 
-        var lastPos = transform.position;
+        // Get a reward or otherwise for that move
+        int trackProgressReward = GetTrackProgress();
 
-        int reward = TrackProgress();
+        // Get a movement vector (comparing the new position with the position we stored)
+        // We can use this to see far much we've moved along the track.
+        var movementVector = transform.position - carPosition;
 
-        var dirMoved = transform.position - lastPos;
-        float angle = Vector3.Angle(dirMoved, trackTransform.forward);
-        float bonus = (1f - angle / 90f) * Mathf.Clamp01(vertical) * Time.fixedDeltaTime;
-        AddReward(bonus + reward);
+        // Map that from an angle (e.g. 180, 0 degrees) to -1, 1.
+        // The bigger an angle the smaller the bonus, and > 90 degrees is a negative reward.
+        float angle = Vector3.Angle(movementVector, trackPosition.forward);
+        float directionalReward = (1f - angle / 90f);
 
-        progressScore += reward;
+        AddReward((directionalReward + trackProgressReward) * timeStep);
     }
 
+    // Collecting only a single observation in code 
     public override void CollectObservations(VectorSensor sensor)
     {
-        float angle = Vector3.SignedAngle(trackTransform.forward, transform.forward, Vector3.up);
-        sensor.AddObservation(angle / 180f);
+        float angle = Vector3.SignedAngle(trackPosition.forward, transform.forward, Vector3.up);
+        sensor.AddObservation(angle - 180f);
     }
 
-    private int TrackProgress()
+    // Calculate a reward based on movement along the track
+    private int GetTrackProgress()
     {
         int reward = 0;
-        var carCenter = transform.position + Vector3.up;
+        var centerOfCar = transform.position + Vector3.up;
 
-        if (Physics.Raycast(carCenter, Vector3.down, out var hit, 2f))
+        // Find what tile I'm on
+        if (Physics.Raycast(centerOfCar, Vector3.down, out var hit, 2f))
         {
-            var newHit = hit.transform;
+            var trackPieceHit = hit.transform;
 
-            if (trackTransform != null && newHit != trackTransform)
+            // Are we on a different tile now?
+            if (trackPosition != null && trackPieceHit != trackPosition)
             {
-                float angle = Vector3.Angle(trackTransform.forward, newHit.position - trackTransform.position);
+                float angle = Vector3.Angle(trackPosition.forward, trackPieceHit.position - trackPosition.position);
                 reward = (angle < 90f) ? 1 : -1;
             }
 
-            trackTransform = newHit;
+            trackPosition = trackPieceHit;
         }
 
         return reward;
     }
 
+    // Put the car back in place at the start of an episode
     public override void OnEpisodeBegin()
     {
-        transform.localPosition = new Vector3(-30.00f, 0f, -47.00f);
+        transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
 
+    // Colliding with something
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("wall"))
@@ -93,8 +108,9 @@ public class CarAgent : Agent
         }
     }
 
+    // Start everything by storing track position
     public override void Initialize()
     {
-        TrackProgress();
+        GetTrackProgress();
     }
 }
