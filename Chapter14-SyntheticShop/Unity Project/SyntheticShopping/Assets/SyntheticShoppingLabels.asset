@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f09f279848e42cea259348b13bce4c5, type: 3}
+  m_Name: SyntheticShoppingLabels
+  m_EditorClassIdentifier: 
+  m_LabelEntries:
+  - label: drink_whippingcream_lucerne
+    id: 1
+  - label: lotion_essentially_nivea
+    id: 2
+  - label: craft_yarn_caron
+    id: 3
+  - label: cereal_cheerios_honeynut
+    id: 4
+  - label: candy_minipralines_lindt
+    id: 5
+  - label: pasta_lasagne_barilla
+    id: 6
+  - label: drink_greentea_itoen
+    id: 7
+  - label: snack_granolabar_naturevalley
+    id: 8
+  - label: snack_biscotti_ghiott
+    id: 9
+  - label: cleaning_snuggle_henkel
+    id: 10
+  autoAssignIds: 1
+  startingLabelId: 1

@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 626391653}
   - component: {fileID: 626391652}
   - component: {fileID: 626391651}
+  - component: {fileID: 626391655}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -335,6 +336,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &626391655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626391650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8823429b12641208135cb2bd79e1096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &645502589
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -527,7 +540,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d50076aff0af4515b4422166496fdd5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Randomizers: []
+  m_Randomizers:
+  - rid: 6492365659782774784
+  - rid: 6492365659782774789
   configuration: {fileID: 0}
   constants:
     randomSeed: 539662031
@@ -537,7 +552,77 @@ MonoBehaviour:
     framesPerIteration: 1
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6492365659782774784
+      type: {class: ColorRandomizer, ns: UnityEngine.Perception.Randomization.Randomizers.SampleRandomizers, asm: Unity.Perception.Runtime}
+      data:
+        m_Enabled: 0
+        collapsed: 0
+        <enabledStateCanBeSwitchedByUser>k__BackingField: 1
+        colorParameter:
+          collapsed: 0
+          hue:
+            rid: 6492365659782774785
+          saturation:
+            rid: 6492365659782774786
+          value:
+            rid: 6492365659782774787
+          alpha:
+            rid: 6492365659782774788
+    - rid: 6492365659782774785
+      type: {class: UniformSampler, ns: UnityEngine.Perception.Randomization.Samplers, asm: Unity.Perception.Runtime}
+      data:
+        range:
+          minimum: 0
+          maximum: 1
+        <minAllowed>k__BackingField: 0
+        <maxAllowed>k__BackingField: 0
+        <shouldCheckValidRange>k__BackingField: 0
+    - rid: 6492365659782774786
+      type: {class: UniformSampler, ns: UnityEngine.Perception.Randomization.Samplers, asm: Unity.Perception.Runtime}
+      data:
+        range:
+          minimum: 0
+          maximum: 1
+        <minAllowed>k__BackingField: 0
+        <maxAllowed>k__BackingField: 0
+        <shouldCheckValidRange>k__BackingField: 0
+    - rid: 6492365659782774787
+      type: {class: UniformSampler, ns: UnityEngine.Perception.Randomization.Samplers, asm: Unity.Perception.Runtime}
+      data:
+        range:
+          minimum: 0
+          maximum: 1
+        <minAllowed>k__BackingField: 0
+        <maxAllowed>k__BackingField: 0
+        <shouldCheckValidRange>k__BackingField: 0
+    - rid: 6492365659782774788
+      type: {class: ConstantSampler, ns: UnityEngine.Perception.Randomization.Samplers, asm: Unity.Perception.Runtime}
+      data:
+        value: 1
+        <minAllowed>k__BackingField: 0
+        <maxAllowed>k__BackingField: 0
+        <shouldCheckValidRange>k__BackingField: 0
+    - rid: 6492365659782774789
+      type: {class: CamRandomiser, ns: , asm: Assembly-CSharp}
+      data:
+        m_Enabled: 1
+        collapsed: 0
+        <enabledStateCanBeSwitchedByUser>k__BackingField: 1
+        cam: {fileID: 1687258584}
+        camX:
+          collapsed: 0
+          value:
+            rid: 6492365659782774790
+    - rid: 6492365659782774790
+      type: {class: UniformSampler, ns: UnityEngine.Perception.Randomization.Samplers, asm: Unity.Perception.Runtime}
+      data:
+        range:
+          minimum: -7
+          maximum: 7
+        <minAllowed>k__BackingField: 0
+        <maxAllowed>k__BackingField: 0
+        <shouldCheckValidRange>k__BackingField: 0
 --- !u!4 &1573770313
 Transform:
   m_ObjectHideFlags: 0
@@ -673,7 +758,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
   m_LocalRotation: {x: 0.5566918, y: -0.0000001564622, z: 0.000000029802326, w: 0.8307192}
-  m_LocalPosition: {x: -0.29399604, y: 10.665682, z: -5.3937044}
+  m_LocalPosition: {x: -7, y: 10.665682, z: -5.3937044}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
